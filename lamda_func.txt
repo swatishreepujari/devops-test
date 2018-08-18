@@ -1,0 +1,49 @@
+import boto3
+
+ec2 = boto3.resource('ec2','us-east-2')
+snsClient = boto3.client('sns','us-east-2')
+
+# instantiate empty array
+RunningInstances = []
+
+
+def lambda_handler(event, context):
+    # create filter for instances in running state
+    running_filters = [
+        {
+            'Name': 'instance-state-name', 
+            'Values': ['running']
+        }
+    ]
+    
+    # filter the instances based on filters() above
+    instances = ec2.instances.filter(Filters=running_filters)
+
+
+    for instance in instances:
+        # for each instance, append to array and print instance id
+        RunningInstances.append(instance.id)
+		ec2.stop_instances(InstanceIds=instance.id)
+        #print("Running Instance" ,instance.id)
+        #print("Running Instance" ,instance.state)
+        #print("Running Instance" ,instance.instance_type)
+        #print("Running Instance" ,instance.launch_time)
+    
+    send_sns()
+    
+def send_sns():
+            print('Publish Messsage to SNS Topic')
+            subject_str = 'EC2 Instances Stopped'
+            msg = '\n\nHi, \n\nFollowing EC2 instances have been stopped\n\nStopped instances: \n'+str(RunningInstances)+'\n\n'
+            response = snsClient.publish(TopicArn='arn:aws:sns:us-east-2:723236623388:SNSARN,Message=msg,Subject=subject_str)
+            
+
+            
+
+
+    
+        
+        
+        
+        
+        
