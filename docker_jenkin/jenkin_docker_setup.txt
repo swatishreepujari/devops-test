@@ -1,0 +1,75 @@
+
+***************************** jenkin installation *********************************
+
+1.in ubuntu host run below commands
+
+wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
+
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+sudo apt-get update
+
+sudo apt-get install jenkins
+
+
+2. copy public ip of ubuntu host and load in browser, it load jenkin page and ask for first time password
+
+http://18.191.217.107:8080/
+ 
+3. open below file in ubuntu host and copy the password and paste in browser and login to jenkin 
+
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+
+4. create username/password
+
+
+5. install all default plugins
+
+
+*************************Add docker plugins **************************************************
+
+1. open jenkin in browser -> manage jenkin -> manage plugin -> available plugin 
+
+2. search for docker and install it 
+
+*************************** Add docker Cloud to jenkin configuration **************************
+
+1. add jenkin user to Docker user group and restart the ubuntu server 
+
+usermod -aG docker jenkins
+
+2. open jenkin in browser -> manage jenkin -> system configuration 
+
+3. scroll down add a docker cloud 
+   and add Docker Host URI = unix:///var/run/docker.sock
+
+4. save changes 
+
+************************************ create a jenkin job ********************************************
+
+1. jenkin -> new item -> enter a jobname -> select free style project -> click on ok 
+
+you can see job link in jenkin dashboard 
+
+******************************* Job configuration ****************************************************
+
+I am creating job with out docker plugin , will update laters
+
+
+1. click on job link and thn click on Configure
+
+2. select checkbox "This project is parameterized" and Select String Parameter .Enter 'Name' as 'IMAGE_NAME', default value any string value you can pass 
+
+3. Click on 'Add build step; and select 'Execute Shell' . Add below 
+
+cd /opt/workspace/webtest/webtest  # path where  Dockerfile and pom.xm and source code exist in your host 
+docker build . -t ${IMAGE_NAME}:latest
+docker run -d -p 9090:9090 --name=${IMAGE_NAME} ${IMAGE_NAME} 
+
+
+
+
+ 
+
+
