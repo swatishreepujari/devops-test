@@ -72,6 +72,18 @@ cd /opt/workspace/webtest/webtest  # path where  Dockerfile and pom.xm and sourc
 docker build . -t ${IMAGE_NAME}:latest
 docker run -d -p 9090:9090 --name=${IMAGE_NAME} ${IMAGE_NAME} 
 
+4. save the job 
+
+******************************* start the job ***********************************
+
+1. on Job dashboard , click on link Build now  and enter the parameter value image name 
+
+2. it will call above steps from execute shell and create a local image and start the container
+
+3. you can verify your service start in browser <publicip>:9090  . Its just display 'Hello World' 
+
+
+
 
 
 
