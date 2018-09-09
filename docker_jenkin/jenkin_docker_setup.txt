@@ -1,5 +1,7 @@
 ********************* install a webservice to run jenkin*****************
 #######test##########
+=======
+&&&&&&&&test&&&&&&&&&&&&
 sudo apt-get update
 sudo apt-get install nginx
 
